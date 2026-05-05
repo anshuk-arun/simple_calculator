@@ -20,18 +20,13 @@ root = Tk()
 frm = ttk.Frame(root, padding=10)
 frm.grid()
 
-# Create a Paned Window (which holds the label) = Paned Window inside Frame
-pw = ttk.Panedwindow(frm, orient='vertical')
-pw.grid()
-
 # Display Label Widget
-displayStr = "Expression"
-ttk.Label(pw, text="Expression_Test", textvariable=displayStr).grid(column=0, row=0)
+displayStr = "Expression"   # UNUSED FOR NOW
+ttk.Label(frm, text="Expression_Test").grid(column=0, row=0)
 
-## TODO error, Label won't show up
-
-# Calculator Buttons Widgets - frame to hold the buttons - at bottom of Paned Window
-calcFrm = ttk.Frame(pw, padding=10).grid(column=0, row=1)
+# Calculator Buttons Widgets - frame to hold the buttons
+calcFrm = ttk.Frame(frm, padding=10) #.grid(column=0, row=1)
+calcFrm.grid()
 
 # Numbers
 ttk.Button(calcFrm, text="7", command=press_number).grid(column=0, row=0)
@@ -52,14 +47,11 @@ ttk.Button(calcFrm, text="-", command=press_op).grid(column=3, row=1)
 ttk.Button(calcFrm, text="*", command=press_op).grid(column=3, row=2)
 ttk.Button(calcFrm, text="/", command=press_op).grid(column=3, row=3)
 
-# 0 Button
-ttk.Button(calcFrm, text="0", command=press_number).grid(column=1, row=3)
 # Calculate Button
-ttk.Button(calcFrm, text="=", command=calculate).grid(column=0, row=3)
+ttk.Button(calcFrm, text="=", command=calculate).grid(column=0, columnspan=2, row=3, sticky="NSEW")
+# 0 Button
+ttk.Button(calcFrm, text="0", command=press_number).grid(column=2, row=3)
 
-
-# # Button Widget - this one can destroy the window (aka close out)
-# ttk.Button(frm, text="Quit", command=root.destroy).grid(column=1, row=0)
 
 ## When creating a child widget, must pass parent widget as first argument to the widget constructor
 ## Use on any widget - configure() for dictionary of info about object, keys() get the names of each option
