@@ -1,8 +1,10 @@
 from tkinter import *
 from tkinter import ttk
 
+# TODO remove all debug print statements.
 
-# TODO Consolidate press_number & press_op & calculate to run through update_label
+# Consolidate press_number & press_op & calculate to run through update_label
+# Maybe Later, not now. If it aint broke, dont fix.
 def update_label():
     pass
 
@@ -11,7 +13,7 @@ def press_number(btnval=int):
     dv = displayVar.get()
     
     # Initial Number, replaces the DisplayVar if its been CLEARED or after a RESULT
-    if (dv == "0") or (dv == "RESULT"):
+    if (dv == cc) or (dv == "RESULT"):
         displayVar.set(f'{btnval}')
         
     # When Numbers are Pressed, update DisplayVar to append the number
@@ -22,15 +24,29 @@ def press_number(btnval=int):
     print("clicked number button", btnval)
 
 
-def press_op(btnOp=StringVar):
-    # When Operator is pressed, update DisplayVar to append to operator
+def press_op(btnOp=str):
     dv = displayVar.get()
-    displayVar.set(f'{dv}{btnOp}')
+    
+    # CANNOT start with operator from Cleared
+    if (dv == cc):
+        print("Invalid Format!", end=" ")       # DEBUG end=" " 
+    
+    # When Operator is pressed, update DisplayVar to append to operator
+    else:
+        displayVar.set(f'{dv}{btnOp}')
 
+    # DEBUG
     print("clicked operator button", btnOp)
     
 
+# TODO Implement Calculation
+# Various errors and invalid formats become easier to detect after
 def calculate():
+    dv = displayVar.get()
+    # DIVISION BY ZERO: During ATTEMPT to calculate, if come across a division by zero
+    # Stop calculation, inform User about error, discard attempt to calculate
+    print("DEBUG: Can't Divide by 0")
+
     # Apply the corresponding operation to the inputted numbers
     # Reset and update DisplayVar with the result
 
@@ -39,13 +55,13 @@ def calculate():
 
     # replace displayVar with the result
     # result = 0  # Eventually, will be an integer result. For now, String
-    result = "RESULT"
-    displayVar.set(f'{result}')
+    result = 9999       # DEBUG: Result is 9999 until calculation is implemented
+    displayVar.set(f'{dv} = {result}')
 
 
 def clearCalc():
     # Reset the Display
-    displayVar.set("0")
+    displayVar.set(cc)
 
     # Remove any numbers or operators in the deques
     ##
@@ -54,6 +70,8 @@ def clearCalc():
 def callback(*args):
     print("variable changed!")
 
+
+#===================================================#
 ### GUI Creation ###
 # Creates the Top Level Window, (root window), main window of application
 root = Tk()
@@ -62,12 +80,13 @@ frm = ttk.Frame(root, padding=10)
 frm.grid()
 
 # Display Label Widget
-displayVar = StringVar()
-displayVar.trace("w", callback)     # Tracking when it gets changed
-displayVar.set("0")                 # Display starts at showing 0
+cc = "_"
 
+displayVar = StringVar()
+displayVar.set(cc)                 # Display starts at showing 0
+
+displayVar.trace("w", callback)     # Tracking when it gets changed #DEBUG?
 ttk.Label(frm, textvariable=displayVar).grid(column=0, row=0)
-#ttk.Label(frm, text="ExpressionLabelStatic").grid(column=0, row=0)
 
 # Calculator Buttons Widgets - frame to hold the buttons
 calcFrm = ttk.Frame(frm, padding=10) #.grid(column=0, row=1)
